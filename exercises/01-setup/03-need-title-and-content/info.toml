@@ -1,0 +1,19 @@
+name = "Title and content"
+chapter = "01-setup"
+order = 3
+hint = "The directive title goes after `..` on the same line; the description goes on indented lines below the options."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "REQ_LOGIN"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_LOGIN"
+field = "title"
+value = "User can log in"
