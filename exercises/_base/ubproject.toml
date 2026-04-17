@@ -1,0 +1,26 @@
+# exercises/_base/ubproject.toml
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[needs]
+id_required = false
+build_json = true
+
+[[needs.types]]
+directive = "req"
+title = "Requirement"
+prefix = "REQ_"
+
+[[needs.types]]
+directive = "spec"
+title = "Specification"
+prefix = "SPEC_"
+
+[[needs.types]]
+directive = "impl"
+title = "Implementation"
+prefix = "IMPL_"
+
+[[needs.types]]
+directive = "test"
+title = "Test"
+prefix = "TEST_"
