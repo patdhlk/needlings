@@ -9,6 +9,7 @@ from needlings import __version__
 from needlings.commands.hint import hint_command
 from needlings.commands.list_ import list_command
 from needlings.commands.reset import reset_command
+from needlings.commands.run import run_command
 from needlings.paths import Paths
 
 
@@ -29,6 +30,7 @@ def cli(ctx: click.Context, root: Path | None) -> None:
         raise click.ClickException(str(exc)) from exc
 
 
-cli.add_command(list_command)
 cli.add_command(hint_command)
+cli.add_command(list_command)
 cli.add_command(reset_command)
+cli.add_command(run_command)
