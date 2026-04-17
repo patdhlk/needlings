@@ -11,7 +11,7 @@ dependencies = [
     "rich>=13.7,<15",
     "watchfiles>=0.21,<2",
     "sphinx>=7.2,<9",
-    "sphinx-needs>=5.1,<6",
+    "sphinx-needs>=8.0,<9",
     "tomli>=2.0; python_version < '3.11'",
 ]
 
