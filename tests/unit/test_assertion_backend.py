@@ -32,7 +32,9 @@ def test_assertion_backend_success(tmp_path: Path) -> None:
     def fake_run(*args, **kwargs):
         _fake_needs_json(tmp_path)
         class R:
-            returncode = 0; stdout = ""; stderr = ""
+            returncode = 0
+            stdout = ""
+            stderr = ""
         return R()
 
     with patch(
@@ -49,7 +51,9 @@ def test_assertion_backend_failure(tmp_path: Path) -> None:
     def fake_run(*args, **kwargs):
         _fake_needs_json(tmp_path)
         class R:
-            returncode = 0; stdout = ""; stderr = ""
+            returncode = 0
+            stdout = ""
+            stderr = ""
         return R()
 
     with patch(
@@ -132,7 +136,9 @@ def test_assertion_backend_mixed_pass_and_fail(tmp_path: Path) -> None:
     def fake_run(*args, **kwargs):
         _fake_needs_json(tmp_path)
         class R:
-            returncode = 0; stdout = ""; stderr = ""
+            returncode = 0
+            stdout = ""
+            stderr = ""
         return R()
 
     with patch(

@@ -7,7 +7,6 @@ from pathlib import Path
 from needlings.backends.base import Backend, VerifyResult
 from needlings.models import Exercise
 
-
 LICENSE_HINT = (
     "ubc reports no active license. needlings is open source, and useblocks "
     "grants free license keys for OSS use — see the README for the request link, "

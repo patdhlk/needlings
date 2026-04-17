@@ -1,14 +1,9 @@
 """Discover and load exercise chapters from disk."""
 from __future__ import annotations
 
-import sys
+import tomllib
 from pathlib import Path
 from typing import Any
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 from needlings.models import Assertion, Chapter, Exercise, ExerciseId, VerifyConfig
 from needlings.paths import Paths

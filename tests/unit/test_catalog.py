@@ -7,7 +7,12 @@ from needlings.catalog import load_catalog
 from needlings.paths import Paths
 
 
-def _scaffold(tmp_path: Path, backend_as_list: bool = False, drop_name: bool = False, drop_assertion_type: bool = False) -> Paths:
+def _scaffold(
+    tmp_path: Path,
+    backend_as_list: bool = False,
+    drop_name: bool = False,
+    drop_assertion_type: bool = False,
+) -> Paths:
     ex = tmp_path / "exercises"
     ex.mkdir()
     (ex / "_base").mkdir()
@@ -29,7 +34,11 @@ def _scaffold(tmp_path: Path, backend_as_list: bool = False, drop_name: bool = F
 
         name_line = "" if drop_name else f'name = "Ex {i}"\n'
 
-        backend_line = 'backend = ["sphinx", "assertions"]' if backend_as_list else 'backend = "sphinx"'
+        backend_line = (
+            'backend = ["sphinx", "assertions"]'
+            if backend_as_list
+            else 'backend = "sphinx"'
+        )
 
         assertions_section = ""
         if drop_assertion_type:
@@ -99,7 +108,8 @@ def test_load_catalog_errors_on_missing_name(tmp_path: Path) -> None:
 def test_load_catalog_errors_on_missing_assertion_type(tmp_path: Path) -> None:
     """Test that missing 'type' in assertion raises RuntimeError with file context."""
     paths = _scaffold(tmp_path, drop_assertion_type=True)
-    with pytest.raises(RuntimeError, match=re.compile(r"info\.toml.*is missing required key 'type'", re.DOTALL)) as exc_info:
+    pattern = re.compile(r"info\.toml.*is missing required key 'type'", re.DOTALL)
+    with pytest.raises(RuntimeError, match=pattern) as exc_info:
         load_catalog(paths)
     assert "info.toml" in str(exc_info.value)
 

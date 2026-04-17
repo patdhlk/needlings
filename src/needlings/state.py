@@ -3,11 +3,10 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from needlings.models import ExerciseId, ExerciseState
-
 
 SCHEMA_VERSION = 1
 
@@ -85,4 +84,4 @@ class State:
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return datetime.now(UTC).isoformat(timespec="seconds")

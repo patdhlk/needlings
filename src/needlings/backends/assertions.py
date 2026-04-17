@@ -1,7 +1,7 @@
 """Evaluate assertion DSL against a parsed needs.json document."""
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from needlings.models import Assertion
 
@@ -20,10 +20,12 @@ def evaluate(assertion: Assertion, needs_doc: dict[str, Any]) -> tuple[bool, str
 def _flatten_needs(doc: dict[str, Any]) -> dict[str, dict[str, Any]]:
     if "versions" in doc:
         current = doc.get("current_version", "")
-        versions = doc["versions"]
-        bucket = versions.get(current) or next(iter(versions.values()), {})
-        return bucket.get("needs", {}) if isinstance(bucket, dict) else {}
-    return doc.get("needs", {})
+        versions: dict[str, Any] = doc["versions"]
+        bucket: Any = versions.get(current) or next(iter(versions.values()), {})
+        if not isinstance(bucket, dict):
+            return {}
+        return cast(dict[str, dict[str, Any]], bucket.get("needs", {}))
+    return cast(dict[str, dict[str, Any]], doc.get("needs", {}))
 
 
 def _need_exists(a: Assertion, needs: dict[str, dict[str, Any]]) -> tuple[bool, str]:

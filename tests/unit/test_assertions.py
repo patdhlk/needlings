@@ -1,7 +1,6 @@
 from needlings.backends.assertions import evaluate
 from needlings.models import Assertion
 
-
 NEEDS_JSON = {
     "versions": {
         "1.0": {
