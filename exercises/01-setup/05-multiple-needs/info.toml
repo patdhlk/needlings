@@ -1,0 +1,33 @@
+name = "Multiple needs"
+chapter = "01-setup"
+order = 5
+hint = "Each directive is its own block, separated by a blank line. Every req/spec needs its own `:id:`."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "REQ_LOGIN"
+
+[[verify.assertions]]
+type = "need_exists"
+id = "REQ_LOGOUT"
+
+[[verify.assertions]]
+type = "need_exists"
+id = "SPEC_SESSION"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_LOGIN"
+field = "type"
+value = "req"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "SPEC_SESSION"
+field = "type"
+value = "spec"
