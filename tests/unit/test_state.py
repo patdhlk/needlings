@@ -13,12 +13,14 @@ def test_state_roundtrip(tmp_path: Path) -> None:
     s.mark_attempt(eid)
     s.mark_completed(eid)
     s.set_current(eid)
+    s.mark_hint_viewed(eid)
     s.save()
 
     reloaded = State.load(path)
     assert reloaded.current == eid
     assert reloaded.exercises[str(eid)].attempts == 1
     assert reloaded.exercises[str(eid)].completed_at is not None
+    assert reloaded.exercises[str(eid)].hint_viewed is True
 
 
 def test_state_increments_attempts(tmp_path: Path) -> None:

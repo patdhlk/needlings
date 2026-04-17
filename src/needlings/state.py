@@ -24,7 +24,7 @@ class State:
     def load(cls, path: Path) -> State:
         if not path.exists():
             return cls(path=path, started_at=_now())
-        raw = json.loads(path.read_text())
+        raw = json.loads(path.read_text(encoding="utf-8"))
         current = raw.get("current_exercise")
         exercises = {
             k: ExerciseState(
@@ -60,7 +60,8 @@ class State:
                     },
                 },
                 indent=2,
-            )
+            ),
+            encoding="utf-8",
         )
 
     def mark_attempt(self, eid: ExerciseId) -> None:
