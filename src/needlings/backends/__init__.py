@@ -1,1 +1,3 @@
-from needlings.backends.base import Backend, VerifyResult  # noqa: F401
+from needlings.backends.base import Backend, VerifyResult
+
+__all__ = ["Backend", "VerifyResult"]
