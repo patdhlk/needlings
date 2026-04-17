@@ -1,0 +1,13 @@
+name = "Read your first warning"
+chapter = "01-setup"
+order = 4
+hint = "Sphinx-needs has a built-in `spec` type but `specification` is not declared. Either add a matching [[needs.types]] block or change the directive name."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "SPEC_AUTH"
