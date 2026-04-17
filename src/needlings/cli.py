@@ -10,6 +10,7 @@ from needlings.commands.doctor import doctor_command
 from needlings.commands.hint import hint_command
 from needlings.commands.init import init_command
 from needlings.commands.list_ import list_command
+from needlings.commands.new_exercise import new_exercise_command
 from needlings.commands.progress import progress_command
 from needlings.commands.reset import reset_command
 from needlings.commands.run import run_command
@@ -39,6 +40,7 @@ cli.add_command(doctor_command)
 cli.add_command(hint_command)
 cli.add_command(init_command)
 cli.add_command(list_command)
+cli.add_command(new_exercise_command)
 cli.add_command(progress_command)
 cli.add_command(reset_command)
 cli.add_command(run_command)
