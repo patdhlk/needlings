@@ -1,0 +1,13 @@
+name = "Hello, need"
+chapter = "01-setup"
+order = 1
+hint = "Replace the placeholder block with a `.. req::` directive whose title is on the same line (e.g. `.. req:: Hello, need`)."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "REQ_HELLO"

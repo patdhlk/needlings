@@ -1,0 +1,8 @@
+title = "Setup & first need"
+exercises = [
+    "01-hello-need",
+    "02-id-required",
+    "03-need-title-and-content",
+    "04-first-build-warning",
+    "05-multiple-needs",
+]
