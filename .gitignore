@@ -28,5 +28,8 @@ _needs_build/
 # Claude Code local state
 .claude/
 
+# Private brainstorming/planning docs (kept locally, not published)
+docs/superpowers/
+
 # OS
 .DS_Store
