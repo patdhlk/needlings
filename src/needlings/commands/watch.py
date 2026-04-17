@@ -12,6 +12,7 @@ from watchfiles import Change, awatch
 from needlings.catalog import flatten, load_catalog
 from needlings.compose import compose_build_dir
 from needlings.models import Exercise
+from needlings.paths import Paths
 from needlings.render import render_failure, render_still_not_done, render_success
 from needlings.sentinel import is_still_not_done
 from needlings.state import State
@@ -31,7 +32,7 @@ def watch_command(ctx: click.Context, ubc_binary: str, debounce_ms: int) -> None
         raise click.ClickException(str(exc)) from exc
 
 
-async def _watch_loop(paths, *, ubc_binary: str, debounce_ms: int) -> None:
+async def _watch_loop(paths: Paths, *, ubc_binary: str, debounce_ms: int) -> None:
     console = Console()
     orchestrator = VerifyOrchestrator.default(ubc_binary=ubc_binary)
 
@@ -68,7 +69,7 @@ def _pick_next(exercises: list[Exercise], state: State) -> Exercise | None:
     return None
 
 
-async def _run_once(paths, ex: Exercise, orch: VerifyOrchestrator,
+async def _run_once(paths: Paths, ex: Exercise, orch: VerifyOrchestrator,
                     console: Console, state: State) -> bool:
     """Run verify; return True on success (advance), False on fail (stay)."""
     starter = Path(ex.path) / "starter"
