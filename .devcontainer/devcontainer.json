@@ -1,0 +1,14 @@
+{
+  "name": "needlings",
+  "build": { "dockerfile": "Dockerfile" },
+  "postCreateCommand": "uv sync --extra dev && uv run needlings init --skip-ubc-check",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "useblocks.ubcode",
+        "ms-python.python"
+      ]
+    }
+  },
+  "forwardPorts": []
+}

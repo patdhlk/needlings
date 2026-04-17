@@ -1,0 +1,19 @@
+{
+  "folders": [
+    { "path": "." },
+    { "path": "exercises" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.needlings": true,
+      "**/_build": true,
+      "**/__pycache__": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "useblocks.ubcode",
+      "ms-python.python"
+    ]
+  }
+}
