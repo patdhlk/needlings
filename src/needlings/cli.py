@@ -6,6 +6,7 @@ from pathlib import Path
 import click
 
 from needlings import __version__
+from needlings.commands.doctor import doctor_command
 from needlings.commands.hint import hint_command
 from needlings.commands.init import init_command
 from needlings.commands.list_ import list_command
@@ -32,6 +33,7 @@ def cli(ctx: click.Context, root: Path | None) -> None:
         raise click.ClickException(str(exc)) from exc
 
 
+cli.add_command(doctor_command)
 cli.add_command(hint_command)
 cli.add_command(init_command)
 cli.add_command(list_command)
