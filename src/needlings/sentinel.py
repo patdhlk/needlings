@@ -7,11 +7,16 @@ TEXT_SUFFIXES = {".rst", ".md", ".txt", ".toml", ".py", ".json"}
 
 
 def is_still_not_done(root: Path, sentinel: str) -> bool:
-    """Return True if any text file under `root` contains `sentinel`."""
+    """Return True if any text file under `root` contains `sentinel`.
+
+    Skips `.pristine/` snapshots — those are reset fixtures, not learner work.
+    """
     for path in root.rglob("*"):
         if not path.is_file():
             continue
         if path.suffix.lower() not in TEXT_SUFFIXES:
+            continue
+        if ".pristine" in path.relative_to(root).parts:
             continue
         try:
             if sentinel in path.read_text(encoding="utf-8", errors="ignore"):

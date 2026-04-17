@@ -32,12 +32,6 @@ You'll also want:
 - The [`ubc`](https://ubcode.useblocks.com/ubc/installation.html) binary, used
   from chapter 6 onward.
 
-### ubCode for open source
-
-needlings is open source, so useblocks' **free open-source tier** applies.
-Request a key via the ubCode docs and activate it with
-`ubc license activate <KEY>`. You only need this to complete chapter 6+.
-
 ## Commands
 
 | Command                    | What it does                              |
@@ -56,7 +50,7 @@ Request a key via the ubCode docs and activate it with
 ## Curriculum (v0.1)
 
 **Chapter 1 — Setup & first need** (5 exercises). Subsequent chapters are
-authored in later releases. See `docs/superpowers/plans/` for the roadmap.
+authored in later releases.
 
 ## Contributing
 
