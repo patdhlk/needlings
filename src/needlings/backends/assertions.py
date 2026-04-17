@@ -11,7 +11,10 @@ def evaluate(assertion: Assertion, needs_doc: dict[str, Any]) -> tuple[bool, str
     handler = _HANDLERS.get(assertion.type)
     if handler is None:
         return False, f"unknown assertion type: {assertion.type}"
-    return handler(assertion, _flatten_needs(needs_doc))
+    try:
+        return handler(assertion, _flatten_needs(needs_doc))
+    except KeyError as e:
+        return False, f"assertion {assertion.type!r} missing required param: {e}"
 
 
 def _flatten_needs(doc: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -61,7 +64,7 @@ def _todo_absent(a: Assertion, needs: dict[str, dict[str, Any]]) -> tuple[bool, 
     # Walks stored descriptions; useful for ensuring learner removed todo:: blocks.
     substring = a.params.get("substring", ".. todo::")
     for nid, need in needs.items():
-        body = str(need.get("content", "")) + str(need.get("description", ""))
+        body = (need.get("content") or "") + (need.get("description") or "")
         if substring in body:
             return False, f"need {nid} still contains {substring!r}"
     return True, "ok"
