@@ -38,7 +38,7 @@ def render_failure(
         Panel(
             body,
             border_style="red",
-            title=f"✗ {exercise.name}  ({exercise.id})",
+            title=Text.assemble("✗ ", exercise.name, f"  ({exercise.id})"),
         )
     )
 
