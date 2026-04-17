@@ -1,0 +1,13 @@
+name = "id_required"
+chapter = "01-setup"
+order = 2
+hint = "Turn on `id_required` in ubproject.toml, then give the existing req an `:id:` field."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "REQ_ALPHA"
