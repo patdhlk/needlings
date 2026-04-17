@@ -16,40 +16,52 @@ from needlings.models import ExerciseId
 @click.pass_context
 def reset_command(ctx: click.Context, exercise_id: str, yes: bool) -> None:
     """Reset an exercise's starter files to their pristine state."""
-    paths = ctx.obj["paths"]
-    eid = ExerciseId.parse(exercise_id)
-    catalog = load_catalog(paths)
-    match = next((e for e in flatten(catalog) if e.id == eid), None)
-    if match is None:
-        raise click.ClickException(f"unknown exercise: {exercise_id}")
+    try:
+        paths = ctx.obj["paths"]
+        eid = ExerciseId.parse(exercise_id)
+        catalog = load_catalog(paths)
+        match = next((e for e in flatten(catalog) if e.id == eid), None)
+        if match is None:
+            raise click.ClickException(f"unknown exercise: {exercise_id}")
 
-    starter = Path(match.path) / "starter"
-    pristine = starter / ".pristine"
-    if not pristine.exists():
-        raise click.ClickException(
-            f"no pristine snapshot at {pristine}; exercise cannot be reset."
-        )
+        exercise_root = Path(match.path).resolve()
+        if not exercise_root.is_relative_to(paths.exercises.resolve()):
+            raise click.ClickException(
+                f"refusing to reset {exercise_id}: resolved path escapes exercises/ directory"
+            )
 
-    if not yes and not click.confirm(
-        f"This will overwrite your edits in {starter}. Continue?", default=False
-    ):
-        return
+        starter = exercise_root / "starter"
+        pristine = starter / ".pristine"
+        if not pristine.exists():
+            raise click.ClickException(
+                f"no pristine snapshot at {pristine}; exercise cannot be reset."
+            )
 
-    for item in starter.iterdir():
-        if item.name == ".pristine":
-            continue
-        if item.is_dir():
-            shutil.rmtree(item)
-        else:
-            item.unlink()
+        if not yes:
+            click.confirm(
+                f"This will overwrite your edits in {starter}. Continue?", default=False, abort=True
+            )
 
-    for item in pristine.rglob("*"):
-        rel = item.relative_to(pristine)
-        target = starter / rel
-        if item.is_dir():
-            target.mkdir(parents=True, exist_ok=True)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, target)
+        for item in starter.iterdir():
+            if item.name == ".pristine":
+                continue
+            if item.is_symlink():
+                item.unlink()
+                continue
+            if item.is_dir():
+                shutil.rmtree(item)
+            else:
+                item.unlink()
 
-    click.echo(f"reset {eid}")
+        for item in pristine.rglob("*"):
+            rel = item.relative_to(pristine)
+            target = starter / rel
+            if item.is_dir():
+                target.mkdir(parents=True, exist_ok=True)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(item, target)
+
+        click.echo(f"reset {eid}")
+    except (RuntimeError, ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc

@@ -13,16 +13,19 @@ from needlings.state import State
 @click.pass_context
 def hint_command(ctx: click.Context, exercise_id: str) -> None:
     """Print the hint for an exercise."""
-    paths = ctx.obj["paths"]
-    eid = ExerciseId.parse(exercise_id)
-    catalog = load_catalog(paths)
-    match = next(
-        (e for e in flatten(catalog) if e.id == eid), None
-    )
-    if match is None:
-        raise click.ClickException(f"unknown exercise: {exercise_id}")
-    click.echo(match.hint)
+    try:
+        paths = ctx.obj["paths"]
+        eid = ExerciseId.parse(exercise_id)
+        catalog = load_catalog(paths)
+        match = next(
+            (e for e in flatten(catalog) if e.id == eid), None
+        )
+        if match is None:
+            raise click.ClickException(f"unknown exercise: {exercise_id}")
+        click.echo(match.hint)
 
-    state = State.load(paths.state_file)
-    state.mark_hint_viewed(eid)
-    state.save()
+        state = State.load(paths.state_file)
+        state.mark_hint_viewed(eid)
+        state.save()
+    except (RuntimeError, ValueError, OSError) as exc:
+        raise click.ClickException(str(exc)) from exc
