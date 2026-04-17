@@ -1,7 +1,7 @@
 name = "id_required"
 chapter = "01-setup"
 order = 2
-hint = "Turn on `id_required` in ubproject.toml, then give the existing req an `:id:` field."
+hint = "Turn on `id_required` in ubproject.toml, then give the existing req `:id: REQ_ALPHA`."
 sentinel = ".. I AM NOT DONE"
 
 [verify]
