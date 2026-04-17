@@ -21,7 +21,10 @@ from needlings.paths import Paths
 def cli(ctx: click.Context, root: Path | None) -> None:
     """needlings — interactive sphinx-needs exercises."""
     ctx.ensure_object(dict)
-    ctx.obj["paths"] = Paths.from_root(root) if root else Paths.discover()
+    try:
+        ctx.obj["paths"] = Paths.from_root(root) if root else Paths.discover()
+    except (RuntimeError, FileNotFoundError) as exc:
+        raise click.ClickException(str(exc)) from exc
 
 
 cli.add_command(list_command)

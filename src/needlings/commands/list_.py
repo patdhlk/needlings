@@ -15,7 +15,10 @@ def list_command(ctx: click.Context) -> None:
     """List all chapters and exercises with progress markers."""
     paths = ctx.obj["paths"]
     console = Console()
-    catalog = load_catalog(paths)
+    try:
+        catalog = load_catalog(paths)
+    except RuntimeError as exc:
+        raise click.ClickException(str(exc)) from exc
     state = State.load(paths.state_file)
     completed = {k for k, v in state.exercises.items() if v.completed_at}
     render_progress_tree(
