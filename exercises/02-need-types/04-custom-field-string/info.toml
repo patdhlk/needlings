@@ -1,0 +1,15 @@
+name = "Custom fields — string"
+chapter = "02-need-types"
+order = 4
+hint = "Declare the field under `[needs.fields.owner]` with `description` and `schema.type = \"string\"`. Then add `:owner: alice` on the need."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_API"
+field = "owner"
+value = "alice"

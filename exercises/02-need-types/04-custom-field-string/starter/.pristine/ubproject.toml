@@ -1,0 +1,16 @@
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[needs]
+id_required = true
+build_json = true
+
+# TODO: declare a custom field `owner` of type string. Add:
+#
+#   [needs.fields.owner]
+#   description = "Person accountable for this need"
+#   schema.type = "string"
+
+[[needs.types]]
+directive = "req"
+title = "Requirement"
+prefix = "REQ_"

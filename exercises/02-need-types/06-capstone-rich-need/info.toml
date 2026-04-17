@@ -1,0 +1,43 @@
+name = "Chapter 2 capstone — a rich need"
+chapter = "02-need-types"
+order = 6
+hint = "Combine everything from this chapter: custom type `story` (prefix US_), tags, status, custom fields `owner` (string) and `asil` (enum QM/A/B/C/D). See the TODO in index.rst for the exact values."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "US_EMERGENCY_STOP"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_EMERGENCY_STOP"
+field = "type"
+value = "story"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_EMERGENCY_STOP"
+field = "status"
+value = "open"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_EMERGENCY_STOP"
+field = "tags"
+value = ["safety", "critical"]
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_EMERGENCY_STOP"
+field = "owner"
+value = "safety-team"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_EMERGENCY_STOP"
+field = "asil"
+value = "D"

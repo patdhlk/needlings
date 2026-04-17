@@ -1,0 +1,19 @@
+name = "Define a custom need type"
+chapter = "02-need-types"
+order = 1
+hint = "Append a new `[[needs.types]]` block with directive = \"story\", title = \"User Story\", prefix = \"US_\"."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_exists"
+id = "US_CHECKOUT"
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "US_CHECKOUT"
+field = "type"
+value = "story"

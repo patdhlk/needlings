@@ -1,0 +1,24 @@
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[needs]
+id_required = true
+build_json = true
+
+[needs.fields.owner]
+description = "Accountable team or person"
+schema.type = "string"
+
+[needs.fields.asil]
+description = "Automotive Safety Integrity Level"
+schema.type = "string"
+schema.enum = ["QM", "A", "B", "C", "D"]
+
+[[needs.types]]
+directive = "req"
+title = "Requirement"
+prefix = "REQ_"
+
+[[needs.types]]
+directive = "story"
+title = "User Story"
+prefix = "US_"

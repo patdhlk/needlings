@@ -1,0 +1,10 @@
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[needs]
+id_required = true
+build_json = true
+
+[[needs.types]]
+directive = "req"
+title = "Requirement"
+prefix = "REQ_"

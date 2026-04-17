@@ -1,0 +1,15 @@
+name = "Tags"
+chapter = "02-need-types"
+order = 3
+hint = "`:tags: security;high-priority` — semicolons separate tag values. Order must match the assertion."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_ENCRYPT"
+field = "tags"
+value = ["security", "high-priority"]

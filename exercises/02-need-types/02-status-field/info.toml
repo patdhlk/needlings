@@ -1,0 +1,15 @@
+name = "The status field"
+chapter = "02-need-types"
+order = 2
+hint = "Add `:status: open` on its own indented line under the directive."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_PASSWORD"
+field = "status"
+value = "open"

@@ -1,0 +1,15 @@
+name = "Custom fields — enum"
+chapter = "02-need-types"
+order = 5
+hint = "Declare `[needs.fields.asil]` with `schema.type = \"string\"` and `schema.enum = [\"QM\", \"A\", \"B\", \"C\", \"D\"]`. Then add `:asil: D` on the need."
+sentinel = ".. I AM NOT DONE"
+
+[verify]
+backend = ["sphinx", "assertions"]
+flags = ["-W"]
+
+[[verify.assertions]]
+type = "need_field_equals"
+id = "REQ_BRAKE"
+field = "asil"
+value = "D"

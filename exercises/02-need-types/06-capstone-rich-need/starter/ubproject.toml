@@ -1,0 +1,26 @@
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[needs]
+id_required = true
+build_json = true
+
+# TODO: declare the custom fields and types this exercise needs:
+#
+#   [needs.fields.owner]
+#   description = "Accountable team or person"
+#   schema.type = "string"
+#
+#   [needs.fields.asil]
+#   description = "Automotive Safety Integrity Level"
+#   schema.type = "string"
+#   schema.enum = ["QM", "A", "B", "C", "D"]
+#
+#   [[needs.types]]
+#   directive = "story"
+#   title     = "User Story"
+#   prefix    = "US_"
+
+[[needs.types]]
+directive = "req"
+title = "Requirement"
+prefix = "REQ_"

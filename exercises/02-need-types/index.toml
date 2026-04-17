@@ -1,0 +1,9 @@
+title = "Need types & fields"
+exercises = [
+    "01-custom-type",
+    "02-status-field",
+    "03-tags-field",
+    "04-custom-field-string",
+    "05-custom-field-enum",
+    "06-capstone-rich-need",
+]
