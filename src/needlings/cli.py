@@ -13,6 +13,7 @@ from needlings.commands.list_ import list_command
 from needlings.commands.progress import progress_command
 from needlings.commands.reset import reset_command
 from needlings.commands.run import run_command
+from needlings.commands.watch import watch_command
 from needlings.paths import Paths
 
 
@@ -40,3 +41,4 @@ cli.add_command(list_command)
 cli.add_command(progress_command)
 cli.add_command(reset_command)
 cli.add_command(run_command)
+cli.add_command(watch_command)
