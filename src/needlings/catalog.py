@@ -29,7 +29,8 @@ def _load_chapter(chapter_dir: Path) -> Chapter:
     if not index_file.exists():
         raise RuntimeError(f"Missing {index_file} — each chapter needs an index.toml.")
 
-    data = tomllib.loads(index_file.read_text())
+    with index_file.open("rb") as f:
+        data = tomllib.load(f)
     title = data.get("title", chapter_dir.name)
     slugs: list[str] = data.get("exercises", [])
 
@@ -51,15 +52,25 @@ def _load_exercise(chapter_id: str, slug: str, ex_dir: Path) -> Exercise:
     if not info_file.exists():
         raise RuntimeError(f"Missing {info_file}.")
 
-    data: dict[str, Any] = tomllib.loads(info_file.read_text())
+    with info_file.open("rb") as f:
+        data: dict[str, Any] = tomllib.load(f)
+
+    if "name" not in data:
+        raise RuntimeError(f"Missing required field 'name' in {info_file}.")
+
     verify_raw = data.get("verify", {})
     backend = verify_raw.get("backend", "sphinx")
-    backends = backend if isinstance(backend, list) else [backend]
+    backends = list(backend) if isinstance(backend, list) else [backend]
 
-    assertions = [
-        Assertion(type=a["type"], params={k: v for k, v in a.items() if k != "type"})
-        for a in verify_raw.get("assertions", [])
-    ]
+    assertions: list[Assertion] = []
+    for a in verify_raw.get("assertions", []):
+        if "type" not in a:
+            raise RuntimeError(
+                f"Assertion entry in {info_file} is missing required key 'type': {a!r}"
+            )
+        assertions.append(
+            Assertion(type=a["type"], params={k: v for k, v in a.items() if k != "type"})
+        )
 
     verify = VerifyConfig(
         backend=backends,

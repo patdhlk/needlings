@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "WebSearch",
+      "mcp__context7__query-docs",
+      "WebFetch(domain:useblocks.com)",
+      "WebFetch(domain:ubcode.useblocks.com)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(uv --version)",
+      "Bash(uv init *)",
+      "Bash(uv sync *)",
+      "Bash(uv run *)",
+      "Bash(git check-ignore *)",
+      "Bash(curl -s https://pypi.org/pypi/sphinx-needs/json)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('latest:', d['info']['version']\\); vs=list\\(d['releases'].keys\\(\\)\\); print\\('recent 10:', sorted\\(vs, key=lambda v: tuple\\(int\\(x\\) for x in v.split\\('.'\\) if x.isdigit\\(\\)\\), reverse=True\\)[:10]\\)\")",
+      "Bash(python3 *)",
+      "Bash(sed -n '565,648p' /Users/patdhlk/src/patdhlk/needlings/docs/superpowers/plans/2026-04-17-needlings-plan-1-infrastructure.md)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
