@@ -22,10 +22,17 @@ class UbcBackend(Backend):
         self.binary = binary
 
     def run(self, *, build_dir: Path, exercise: Exercise) -> VerifyResult:
-        proc = subprocess.run(
-            [self.binary, "check", str(build_dir)],
-            capture_output=True, text=True, cwd=build_dir,
-        )
+        # ubc check takes no per-exercise flags; exercise retained for Backend signature parity.
+        try:
+            proc = subprocess.run(
+                [self.binary, "check", str(build_dir)],
+                capture_output=True, text=True, cwd=build_dir,
+            )
+        except FileNotFoundError:
+            return VerifyResult.failure(
+                self.name,
+                summary="ubc binary not found — install ubc and ensure it's on PATH.",
+            )
         if proc.returncode == 0:
             return VerifyResult.success(self.name, summary="ubc check clean")
 

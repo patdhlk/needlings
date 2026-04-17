@@ -30,6 +30,8 @@ def test_ubc_backend_failure(tmp_path: Path) -> None:
         run.return_value.stderr = ""
         result = backend.run(build_dir=tmp_path, exercise=_ex())
     assert not result.passed
+    assert result.stdout == "violation\n"
+    assert result.stderr == ""
 
 
 def test_ubc_backend_license_hint(tmp_path: Path) -> None:
@@ -42,3 +44,12 @@ def test_ubc_backend_license_hint(tmp_path: Path) -> None:
     assert not result.passed
     assert "license" in result.summary.lower()
     assert "open source" in result.summary.lower()
+
+
+def test_ubc_backend_binary_missing(tmp_path: Path) -> None:
+    backend = UbcBackend(binary="ubc")
+    with patch("needlings.backends.ubc_backend.subprocess.run",
+               side_effect=FileNotFoundError):
+        result = backend.run(build_dir=tmp_path, exercise=_ex())
+    assert not result.passed
+    assert "not found" in result.summary.lower()
