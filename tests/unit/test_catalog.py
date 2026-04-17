@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -76,32 +77,29 @@ def test_load_catalog_errors_on_unknown_slug_in_index(tmp_path: Path) -> None:
 def test_load_catalog_backend_as_list(tmp_path: Path) -> None:
     """Test that backend as a list is correctly copied (not aliased)."""
     paths = _scaffold(tmp_path, backend_as_list=True)
-    catalog1 = load_catalog(paths)
 
-    assert catalog1[0].exercises[0].verify.backend == ["sphinx", "assertions"]
-    assert len(catalog1[0].exercises[0].verify.backend) == 2
+    catalog = load_catalog(paths)
 
-    # Mutate the first catalog's backend list
-    catalog1[0].exercises[0].verify.backend.append("extra")
-
-    # Reload and verify the new catalog is unaffected
-    catalog2 = load_catalog(paths)
-    assert catalog2[0].exercises[0].verify.backend == ["sphinx", "assertions"]
-    assert len(catalog2[0].exercises[0].verify.backend) == 2
+    assert catalog[0].exercises[0].verify.backend == ["sphinx", "assertions"]
+    # Defensive: VerifyConfig should own its own list, not alias the tomllib-parsed
+    # one. Full mutation-isolation can't be unit-tested without injecting a mock
+    # loader; we rely on `list(backend)` in catalog.py plus branch coverage here.
 
 
 def test_load_catalog_errors_on_missing_name(tmp_path: Path) -> None:
     """Test that missing 'name' field raises RuntimeError with file context."""
     paths = _scaffold(tmp_path, drop_name=True)
-    with pytest.raises(RuntimeError, match="name"):
+    with pytest.raises(RuntimeError, match=r"required field 'name'.*info\.toml") as exc_info:
         load_catalog(paths)
+    assert "info.toml" in str(exc_info.value)
 
 
 def test_load_catalog_errors_on_missing_assertion_type(tmp_path: Path) -> None:
     """Test that missing 'type' in assertion raises RuntimeError with file context."""
     paths = _scaffold(tmp_path, drop_assertion_type=True)
-    with pytest.raises(RuntimeError, match="type"):
+    with pytest.raises(RuntimeError, match=re.compile(r"info\.toml.*is missing required key 'type'", re.DOTALL)) as exc_info:
         load_catalog(paths)
+    assert "info.toml" in str(exc_info.value)
 
 
 def test_flatten(tmp_path: Path) -> None:

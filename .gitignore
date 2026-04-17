@@ -24,5 +24,8 @@ _needs_build/
 .idea/
 *.swp
 
+# Claude Code local state
+.claude/
+
 # OS
 .DS_Store
