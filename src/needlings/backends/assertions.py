@@ -18,9 +18,11 @@ def evaluate(assertion: Assertion, needs_doc: dict[str, Any]) -> tuple[bool, str
 
 
 def _flatten_needs(doc: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    current = doc.get("current_version")
-    if current and "versions" in doc:
-        return doc["versions"].get(current, {}).get("needs", {})
+    if "versions" in doc:
+        current = doc.get("current_version", "")
+        versions = doc["versions"]
+        bucket = versions.get(current) or next(iter(versions.values()), {})
+        return bucket.get("needs", {}) if isinstance(bucket, dict) else {}
     return doc.get("needs", {})
 
 
