@@ -22,6 +22,8 @@ def _scaffold(tmp_path: Path, backend_as_list: bool = False, drop_name: bool = F
         d.mkdir()
         (d / "starter").mkdir()
         (d / "starter" / "index.rst").write_text(".. I AM NOT DONE\n")
+        (d / "starter" / ".pristine").mkdir()
+        (d / "starter" / ".pristine" / "index.rst").write_text(".. I AM NOT DONE\n")
         (d / "solution").mkdir()
         (d / "solution" / "index.rst").write_text(".. req:: hi\n")
 
