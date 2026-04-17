@@ -1,0 +1,35 @@
+name: Curriculum
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sphinx-needs: ["pinned", "latest"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv python install 3.12
+      - name: Install dependencies (pinned)
+        if: matrix.sphinx-needs == 'pinned'
+        run: uv sync --extra dev
+      - name: Install dependencies (latest sphinx-needs)
+        if: matrix.sphinx-needs == 'latest'
+        run: |
+          uv sync --extra dev
+          uv pip install --upgrade 'sphinx-needs<9'
+      - name: Install ubc
+        run: |
+          curl -sSL -o /usr/local/bin/ubc \
+            https://github.com/useblocks/ubcode-pub/releases/latest/download/ubc-linux
+          chmod +x /usr/local/bin/ubc
+          ubc --version
+        continue-on-error: true  # ubc is used only for chapter 6+; chapter 1 can pass without.
+      - name: Verify starters fail
+        run: uv run needlings verify --starters
+      - name: Verify solutions pass
+        run: uv run needlings verify --all

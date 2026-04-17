@@ -1,0 +1,31 @@
+name: Nightly drift
+on:
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC daily
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv python install 3.12
+      - run: |
+          uv sync --extra dev
+          uv pip install --upgrade sphinx sphinx-needs
+      - run: uv run needlings verify --all
+        id: verify
+        continue-on-error: true
+      - name: Open issue on failure
+        if: steps.verify.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly drift: verify --all failed`,
+              body: 'A scheduled nightly run of `needlings verify --all` failed. Check the failed workflow run for details.',
+              labels: ['drift', 'curriculum'],
+            });
