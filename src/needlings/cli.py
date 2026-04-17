@@ -7,6 +7,7 @@ import click
 
 from needlings import __version__
 from needlings.commands.hint import hint_command
+from needlings.commands.init import init_command
 from needlings.commands.list_ import list_command
 from needlings.commands.progress import progress_command
 from needlings.commands.reset import reset_command
@@ -32,6 +33,7 @@ def cli(ctx: click.Context, root: Path | None) -> None:
 
 
 cli.add_command(hint_command)
+cli.add_command(init_command)
 cli.add_command(list_command)
 cli.add_command(progress_command)
 cli.add_command(reset_command)
