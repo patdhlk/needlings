@@ -22,13 +22,27 @@ class AssertionBackend(Backend):
         ]
         proc = subprocess.run(cmd, capture_output=True, text=True, cwd=build_dir)
         needs_file = out / "needs.json"
-        if proc.returncode != 0 or not needs_file.exists():
+        if proc.returncode != 0:
             return VerifyResult.failure(
                 self.name, stdout=proc.stdout, stderr=proc.stderr,
-                summary="sphinx-build -b needs failed before assertions could run",
+                summary=f"sphinx-build -b needs exited {proc.returncode}",
+            )
+        if not needs_file.exists():
+            return VerifyResult.failure(
+                self.name, stdout=proc.stdout, stderr=proc.stderr,
+                summary=(
+                    "sphinx-build succeeded but needs.json was not produced — "
+                    "is sphinx-needs installed and 'sphinx_needs' in extensions?"
+                ),
             )
 
-        doc = json.loads(needs_file.read_text())
+        try:
+            doc = json.loads(needs_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            return VerifyResult.failure(
+                self.name, stdout=proc.stdout, stderr=proc.stderr,
+                summary=f"needs.json could not be parsed: {exc}",
+            )
         failures: list[str] = []
         for a in exercise.verify.assertions:
             ok, msg = evaluate(a, doc)
@@ -37,7 +51,9 @@ class AssertionBackend(Backend):
 
         if failures:
             return VerifyResult.failure(
-                self.name, stderr="\n".join(failures),
+                self.name,
+                stdout=proc.stdout,
+                stderr="\n".join(failures),
                 summary=f"{len(failures)} assertion(s) failed",
             )
         return VerifyResult.success(
