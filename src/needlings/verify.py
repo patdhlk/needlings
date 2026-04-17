@@ -25,15 +25,21 @@ class VerifyOrchestrator:
 
     def run(self, *, build_dir: Path, exercise: Exercise) -> list[VerifyResult]:
         results: list[VerifyResult] = []
-        for name in exercise.verify.backend:
-            backend = self.backends.get(name)
+        for backend_name in exercise.verify.backend:
+            backend = self.backends.get(backend_name)
             if backend is None:
-                raise RuntimeError(f"unknown backend {name!r}")
-            result = backend.run(build_dir=build_dir, exercise=exercise)
+                raise RuntimeError(f"unknown backend {backend_name!r}")
+            try:
+                result = backend.run(build_dir=build_dir, exercise=exercise)
+            except Exception as exc:  # noqa: BLE001
+                result = VerifyResult.failure(
+                    backend_name, summary=f"backend {backend_name!r} raised: {exc}"
+                )
             results.append(result)
             if not result.passed:
                 break
         return results
 
-    def all_passed(self, results: list[VerifyResult]) -> bool:
+    @staticmethod
+    def all_passed(results: list[VerifyResult]) -> bool:
         return bool(results) and all(r.passed for r in results)

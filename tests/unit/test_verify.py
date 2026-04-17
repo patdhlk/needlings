@@ -1,7 +1,10 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
+from needlings.backends.assertion_backend import AssertionBackend
 from needlings.backends.base import VerifyResult
+from needlings.backends.sphinx_backend import SphinxBackend
+from needlings.backends.ubc_backend import UbcBackend
 from needlings.models import Exercise, ExerciseId, VerifyConfig
 from needlings.verify import VerifyOrchestrator
 
@@ -46,3 +49,39 @@ def test_orchestrator_unknown_backend_raises(tmp_path: Path) -> None:
     orch = VerifyOrchestrator({})
     with pytest.raises(RuntimeError, match="unknown backend"):
         orch.run(build_dir=tmp_path, exercise=_ex(["nope"]))
+
+
+def test_orchestrator_converts_backend_exception_to_failure(tmp_path: Path) -> None:
+    b = MagicMock()
+    b.run.side_effect = RuntimeError("kaboom")
+
+    orch = VerifyOrchestrator({"sphinx": b})
+    results = orch.run(build_dir=tmp_path, exercise=_ex(["sphinx"]))
+
+    assert len(results) == 1
+    assert not results[0].passed
+    assert "kaboom" in results[0].summary
+    assert results[0].backend == "sphinx"
+
+
+def test_default_builds_three_backends() -> None:
+    orch = VerifyOrchestrator.default(ubc_binary="my-ubc")
+    assert set(orch.backends) == {"sphinx", "ubc", "assertions"}
+    assert isinstance(orch.backends["sphinx"], SphinxBackend)
+    assert isinstance(orch.backends["assertions"], AssertionBackend)
+    assert isinstance(orch.backends["ubc"], UbcBackend)
+    assert orch.backends["ubc"].binary == "my-ubc"
+
+
+def test_all_passed_empty_is_false() -> None:
+    assert not VerifyOrchestrator.all_passed([])
+
+
+def test_all_passed_all_passing_is_true() -> None:
+    results = [VerifyResult.success("a"), VerifyResult.success("b")]
+    assert VerifyOrchestrator.all_passed(results)
+
+
+def test_all_passed_any_failure_is_false() -> None:
+    results = [VerifyResult.success("a"), VerifyResult.failure("b")]
+    assert not VerifyOrchestrator.all_passed(results)
